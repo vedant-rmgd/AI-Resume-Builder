@@ -1,9 +1,13 @@
-import React from 'react'
+import Banner from "../components/home/Banner.jsx";
+import Hero from "../components/home/Hero.jsx";
 
 function Home() {
-  return (
-    <div>Home page</div>
-  )
+    return (
+        <>
+            <Banner />
+            <Hero/>
+        </>
+    );
 }
 
-export default Home
+export default Home;
