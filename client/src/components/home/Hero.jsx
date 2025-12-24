@@ -35,12 +35,6 @@ function Hero() {
                             Features
                         </a>
                         <a
-                            href="#testimonials"
-                            className="hover:text-green-600 transition"
-                        >
-                            Testimonials
-                        </a>
-                        <a
                             href="#cta"
                             className="hover:text-green-600 transition"
                         >
@@ -92,9 +86,6 @@ function Hero() {
                     </a>
                     <a href="#features" className="text-white">
                         Features
-                    </a>
-                    <a href="#testimonials" className="text-white">
-                        Testimonials
                     </a>
                     <a href="#contacts" className="text-white">
                         Contacts
