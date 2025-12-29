@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 function Hero() {
     const [menuOpen, setMenuOpen] = React.useState(false);
 
-    const logos = [
-        "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg",
-        "https://saasly.prebuiltui.com/assets/companies-logo/framer.svg",
-        "https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg",
-        "https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg",
-        "https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg",
-    ];
+    // const logos = [
+    //     "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg",
+    //     "https://saasly.prebuiltui.com/assets/companies-logo/framer.svg",
+    //     "https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg",
+    //     "https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg",
+    //     "https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg",
+    // ];
 
     return (
         <>
-            <div className="min-h-screen pb-20">
+            <div className="h-auto pb-20">
                 {/* Navbar */}
                 <nav className="z-50 flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-40 text-sm">
                     <p className="font-bold text-3xl">
@@ -49,12 +49,12 @@ function Hero() {
                         >
                             Get started
                         </Link>
-                        <a
+                        <Link
                             to="/app?state=login"
                             className="hidden md:block px-6 py-2 border active:scale-95 hover:bg-slate-50 transition-all rounded-full text-slate-700 hover:text-slate-900"
                         >
                             Login
-                        </a>
+                        </Link>
                     </div>
 
                     <button
@@ -226,7 +226,7 @@ function Hero() {
                         </button>
                     </div>
 
-                    <p className="py-6 text-slate-600 mt-14">
+                    {/* <p className="py-6 text-slate-600 mt-14">
                         Trusting by leading brands, including
                     </p>
 
@@ -242,7 +242,7 @@ function Hero() {
                                 className="h-6 w-auto max-w-xs"
                             />
                         ))}
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <style>
