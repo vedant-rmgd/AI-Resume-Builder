@@ -42,6 +42,13 @@ function Dashboard() {
         e.preventDefault();
     };
 
+    const deleteResume = (resumeId) => {
+        const confirm = window.confirm("Are you sure want to delete this resume?")
+        if (confirm) {
+            setAllResume((prev) => prev.filter((resume) => resume._id !== resumeId))
+        }
+    }
+
     useEffect(() => {
         loadAllResumes();
     }, []);
@@ -109,7 +116,9 @@ function Dashboard() {
                                     ).toLocaleDateString()}
                                 </p>
                                 <div onClick={e => e.stopPropagation()} className="absolute top-1 right-1 group-hover:flex items-center hidden">
-                                    <TrashIcon className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
+                                    <TrashIcon 
+                                    onClick={() => deleteResume(resume._id)}
+                                    className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
                                     <PencilIcon
                                         onClick={() => {
                                             setEditResumeId(resume._id);
