@@ -12,9 +12,10 @@ import {
     Sparkles,
     User,
 } from "lucide-react";
+import PersonalInfoForm from "../components/PersonalInfoForm.jsx";
 
 function ResumeBuilder() {
-    const { resumeId } = useParams();
+    const { resumeId } = useParams(); // we are taking the resume id from URL, and on that basis we are fetching the resume details of a particular resume
     const [resumeData, setResumeData] = useState({
         _id: "",
         title: "",
@@ -125,11 +126,36 @@ function ResumeBuilder() {
                                     </button>
                                 </div>
                             </div>
+
+                            {/* form content */}
+                            <div className="space-y-6">
+                                {activeSection.id === "personal" && (
+                                    <PersonalInfoForm
+                                        data={resumeData.personal_info}
+                                        onChange={(data) =>
+                                            setResumeData((prev) => ({
+                                                ...prev,
+                                                personal_info: data,
+                                            }))
+                                        }
+                                        removeBackground={removeBackground}
+                                        setRemoveBackground={
+                                            setRemoveBackground
+                                        }
+                                    />
+                                )}
+                            </div>
                         </div>
                     </div>
 
                     {/* right column - preview of the resume */}
-                    <div></div>
+                    <div className="lg:col-span-7 max-lg:mt-6">
+                        <div>
+                            {/* ---buttons--- */}
+                        </div>
+
+                        {/* ---resume preview--- */}
+                    </div>
                 </div>
             </div>
         </div>
