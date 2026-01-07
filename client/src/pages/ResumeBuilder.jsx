@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { dummyResumeData } from "../assets/assets.js";
 import {
@@ -13,6 +13,7 @@ import {
     User,
 } from "lucide-react";
 import PersonalInfoForm from "../components/PersonalInfoForm.jsx";
+import ResumePreview from "../components/ResumePreview.jsx";
 
 function ResumeBuilder() {
     const { resumeId } = useParams(); // we are taking the resume id from URL, and on that basis we are fetching the resume details of a particular resume
@@ -150,11 +151,14 @@ function ResumeBuilder() {
 
                     {/* right column - preview of the resume */}
                     <div className="lg:col-span-7 max-lg:mt-6">
-                        <div>
-                            {/* ---buttons--- */}
-                        </div>
+                        <div>{/* ---buttons--- */}</div>
 
                         {/* ---resume preview--- */}
+                        <ResumePreview
+                            data={resumeData}
+                            template={resumeData.template}
+                            accentColor={resumeData.accent_color}
+                        />
                     </div>
                 </div>
             </div>
