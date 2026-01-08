@@ -15,6 +15,7 @@ import {
 import PersonalInfoForm from "../components/PersonalInfoForm.jsx";
 import ResumePreview from "../components/ResumePreview.jsx";
 import TemplateSelector from "../components/TemplateSelector.jsx";
+import ColorPicker from "../components/ColorPicker.jsx";
 
 function ResumeBuilder() {
     const { resumeId } = useParams(); // we are taking the resume id from URL, and on that basis we are fetching the resume details of a particular resume
@@ -89,7 +90,7 @@ function ResumeBuilder() {
 
                             {/* section navigation */}
                             <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
-                                <div className="flex justify-between items-center mb-6 border-b border-gray-300 py-1">
+                                <div className="flex items-center gap-2">
                                     <TemplateSelector
                                         selectedTemplate={resumeData.template}
                                         onChange={(template) =>
@@ -98,6 +99,10 @@ function ResumeBuilder() {
                                                 template,
                                             }))
                                         }
+                                    />
+                                    <ColorPicker 
+                                    selectedColor={resumeData.accent_color}
+                                    onChange={(color) => setResumeData((prev) => ({...prev, accent_color: color}))}
                                     />
                                 </div>
                                 <div className="flex items-center">
