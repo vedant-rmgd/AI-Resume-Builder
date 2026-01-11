@@ -18,6 +18,7 @@ import TemplateSelector from "../components/TemplateSelector.jsx";
 import ColorPicker from "../components/ColorPicker.jsx";
 import ProfessionalSummaryForm from "../components/ProfessionalSummaryForm.jsx";
 import ExperienceForm from "../components/ExperienceForm.jsx";
+import EducationForm from "../components/EducationForm.jsx";
 
 function ResumeBuilder() {
     const { resumeId } = useParams(); // we are taking the resume id from URL, and on that basis we are fetching the resume details of a particular resume
@@ -188,6 +189,18 @@ function ResumeBuilder() {
                                             setResumeData((prev) => ({
                                                 ...prev,
                                                 experience: data,
+                                            }))
+                                        }
+                                    />
+                                )}
+
+                                {activeSection.id === "education" && (
+                                    <EducationForm
+                                        data={resumeData.education}
+                                        onChange={(data) =>
+                                            setResumeData((prev) => ({
+                                                ...prev,
+                                                education: data,
                                             }))
                                         }
                                     />
