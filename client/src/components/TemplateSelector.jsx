@@ -7,12 +7,14 @@ function TemplateSelector({ selectedTemplate, onChange }) {
         {
             id: "classic",
             name: "Classic",
-            preview: "A clean, traditional resume format with clear sections and professional typography",
+            preview:
+                "A clean, traditional resume format with clear sections and professional typography",
         },
         {
             id: "modern",
             name: "Modern",
-            preview: "Sleek design with strategic use of color and modern font choices",
+            preview:
+                "Sleek design with strategic use of color and modern font choices",
         },
         {
             id: "minimal-image",
@@ -22,7 +24,8 @@ function TemplateSelector({ selectedTemplate, onChange }) {
         {
             id: "minimal",
             name: "Minimal",
-            preview: "Ultra clean design that puts your content front and center",
+            preview:
+                "Ultra clean design that puts your content front and center",
         },
     ];
     return (
@@ -35,7 +38,7 @@ function TemplateSelector({ selectedTemplate, onChange }) {
                 <span className="max-sm:hidden">Template</span>
             </button>
             {isOpen && (
-                <div className="absolute top-full w-xs p-3 mt-2 space-y-3 z-10 bg-white rounded-md border border-gray-200 shadow-sm">
+                <div className="absolute top-full w-xs max-h-80 overflow-y-auto thin-scrollbar p-3 mt-2 space-y-3 z-10 bg-white rounded-md border border-gray-200 shadow-sm">
                     {templates.map((template) => (
                         <div
                             key={template.id}

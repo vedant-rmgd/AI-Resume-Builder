@@ -57,7 +57,7 @@ function ColorPicker({ selectedColor, onChange }) {
             </button>
 
             {isOpen && (
-                <div className="grid grid-cols-4 w-60 gap-2 absolute top-full left-0 right-0 p-3 mt-2 z-10 bg-white rounded-md border border-gray-200 shadow-sm">
+                <div className="absolute top-full left-0 mt-2 z-50 w-64 max-h-50 overflow-y-auto overscroll-contain grid grid-cols-4 gap-3 p-3 bg-white rounded-md border border-gray-200 shadow-sm thin-scrollbar scrollbar-thumb-gray-300 scrollbar-track-transparent">
                     {colors.map((color) => (
                         <div
                             key={color.value}
@@ -65,18 +65,18 @@ function ColorPicker({ selectedColor, onChange }) {
                                 onChange(color.value);
                                 setIsOpen(false);
                             }}
-                            className="relative cursor-pointer group flex flex-col"
+                            className="relative cursor-pointer flex flex-col items-center"
                         >
                             <div
-                                className="w-12 h-12 rounded-full border-2 border-transparent group-hover:border-black/25 transition-colors"
+                                className="w-12 h-12 rounded-full border-2 border-transparent hover:border-black/30 transition-colors"
                                 style={{ backgroundColor: color.value }}
                             ></div>
                             {selectedColor === color.value && (
-                                <div className="absolute top-0 left-0 right-0 bottom-4.5 flex items-center justify-center">
-                                    <Check className="size-5 text-white" />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <Check className="size-5 text-white drop-shadow" />
                                 </div>
                             )}
-                            <p className="text-xs text-center mt-1 text-gray-600">
+                            <p className="text-[11px] mt-1 text-gray-600 text-center">
                                 {color.name}
                             </p>
                         </div>
