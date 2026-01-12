@@ -7,14 +7,12 @@ function TemplateSelector({ selectedTemplate, onChange }) {
         {
             id: "classic",
             name: "Classic",
-            preview:
-                "A clean, traditional resume format with clear sections and professional typography",
+            preview: "A clean, traditional resume format with clear sections and professional typography",
         },
         {
             id: "modern",
             name: "Modern",
-            preview:
-                "Sleek design with strategic use of color and modern font choices",
+            preview: "Sleek design with strategic use of color and modern font choices",
         },
         {
             id: "minimal-image",
@@ -24,8 +22,7 @@ function TemplateSelector({ selectedTemplate, onChange }) {
         {
             id: "minimal",
             name: "Minimal",
-            preview:
-                "Ultra clean design that puts your content front and center",
+            preview: "Ultra clean design that puts your content front and center",
         },
     ];
     return (

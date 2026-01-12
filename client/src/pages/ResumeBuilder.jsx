@@ -19,9 +19,10 @@ import ColorPicker from "../components/ColorPicker.jsx";
 import ProfessionalSummaryForm from "../components/ProfessionalSummaryForm.jsx";
 import ExperienceForm from "../components/ExperienceForm.jsx";
 import EducationForm from "../components/EducationForm.jsx";
+import ProjectForm from "../components/ProjectForm.jsx";
 
 function ResumeBuilder() {
-    const { resumeId } = useParams(); // we are taking the resume id from URL, and on that basis we are fetching the resume details of a particular resume
+    const { resumeId } = useParams();
     const [resumeData, setResumeData] = useState({
         _id: "",
         title: "",
@@ -201,6 +202,18 @@ function ResumeBuilder() {
                                             setResumeData((prev) => ({
                                                 ...prev,
                                                 education: data,
+                                            }))
+                                        }
+                                    />
+                                )}
+
+                                {activeSection.id === "projects" && (
+                                    <ProjectForm
+                                        data={resumeData.project}
+                                        onChange={(data) =>
+                                            setResumeData((prev) => ({
+                                                ...prev,
+                                                project: data,
                                             }))
                                         }
                                     />
