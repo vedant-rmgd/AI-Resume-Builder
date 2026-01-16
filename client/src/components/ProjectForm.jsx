@@ -54,7 +54,7 @@ function ProjectForm({ data, onChange }) {
                             </button>
                         </div>
 
-                        <div className="grid gap-3">
+                        <div className="grid gap-3"> 
                             <input
                                 value={project.name || ""}
                                 onChange={(e) =>
