@@ -56,3 +56,39 @@ export const registerUser = async (req, res) => {
         throw new apiError(404, error?.message);
     }
 };
+export const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        //validate every field
+        if (!email || !password) {
+            throw new apiError(400, "All fields are required!");
+        }
+
+        //check if user already exist or not
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            throw new apiError(404, "Invalid crediantles");
+        }
+
+        // check if the password is correct or not
+        if (!user.comparePassword(password)) {
+            throw new apiError(400, "Invalid email or password");
+        }
+
+        //generate token
+        const token = generateToken(user._id);
+        user.password = undefined;
+
+        //return response
+        return res
+            .status(200)
+            .json(
+                new apiResponse(200, user, "user is successfully loggedin"),
+                token,
+            );
+    } catch (error) {
+        throw new apiError(400, error?.message);
+    }
+};
