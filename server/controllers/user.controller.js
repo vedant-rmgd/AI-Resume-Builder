@@ -1,0 +1,58 @@
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { User } from "../models/user.model.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const generateToken = (userId) => {
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+    });
+
+    return token;
+};
+
+export const registerUser = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        //validate every field
+        if (!name || !email || !password) {
+            throw new apiError(400, "All fields are required!");
+        }
+
+        //check if user already exist or not
+        const existedUSer = await User.findOne({ email });
+
+        if (existedUSer) {
+            throw new apiError(404, "User with this email already exist");
+        }
+
+        //hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        //now create new user in the database
+        const newUSer = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+        });
+
+        //return success message
+        const token = generateToken(newUSer._id);
+        newUSer.password = undefined;
+
+        return res
+            .status(200)
+            .json(
+                new apiResponse(
+                    200,
+                    newUSer,
+                    "user is successfully registered",
+                ),
+                token,
+            );
+    } catch (error) {
+        throw new apiError(404, error?.message);
+    }
+};
