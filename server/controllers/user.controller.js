@@ -56,6 +56,7 @@ export const registerUser = async (req, res) => {
         throw new apiError(404, error?.message);
     }
 };
+
 export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -67,7 +68,6 @@ export const loginUser = async (req, res) => {
 
         //check if user already exist or not
         const user = await User.findOne({ email });
-
         if (!user) {
             throw new apiError(404, "Invalid crediantles");
         }
@@ -88,6 +88,27 @@ export const loginUser = async (req, res) => {
                 new apiResponse(200, user, "user is successfully loggedin"),
                 token,
             );
+    } catch (error) {
+        throw new apiError(400, error?.message);
+    }
+};
+
+export const getUserById = async () => {
+    try {
+        const userId = req.userId;
+
+        //check if user already exist or not
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new apiError(404, "User not found");
+        }
+
+        //return user
+        user.password = undefined;
+
+        return res
+            .status(200)
+            .json(new apiResponse(200, user, "user is successfully featched"));
     } catch (error) {
         throw new apiError(400, error?.message);
     }
