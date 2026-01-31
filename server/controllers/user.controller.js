@@ -32,22 +32,22 @@ export const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         //now create new user in the database
-        const newUSer = await User.create({
+        const newUser = await User.create({
             name,
             email,
             password: hashedPassword,
         });
 
         //return success message
-        const token = generateToken(newUSer._id);
-        newUSer.password = undefined;
+        const token = generateToken(newUser._id);
+        newUser.password = undefined;
 
         return res
             .status(200)
             .json(
                 new apiResponse(
                     200,
-                    newUSer,
+                    { newUser: newUser, token: token },
                     "user is successfully registered",
                 ),
                 token,
@@ -85,15 +85,18 @@ export const loginUser = async (req, res) => {
         return res
             .status(200)
             .json(
-                new apiResponse(200, user, "user is successfully loggedin"),
-                token,
+                new apiResponse(
+                    200,
+                    { user: user, token: token },
+                    "user is successfully loggedin",
+                ),
             );
     } catch (error) {
         throw new apiError(400, error?.message);
     }
 };
 
-export const getUserById = async () => {
+export const getUserById = async (req, res) => {
     try {
         const userId = req.userId;
 
