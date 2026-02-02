@@ -3,6 +3,7 @@ import { apiResponse } from "../utils/apiResponse.js";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Resume } from "../models/resume.model.js";
 
 const generateToken = (userId) => {
     const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
@@ -112,6 +113,30 @@ export const getUserById = async (req, res) => {
         return res
             .status(200)
             .json(new apiResponse(200, user, "user is successfully featched"));
+    } catch (error) {
+        throw new apiError(400, error?.message);
+    }
+};
+
+export const getUserResumes = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        const resumes = await Resume.find({ userId });
+
+        if (!resumes) {
+            throw new apiError(404, "Resume not found");
+        }
+
+        return res
+            .status(200)
+            .json(
+                new apiResponse(
+                    200,
+                    resumes,
+                    "Resumes are successfully featched",
+                ),
+            );
     } catch (error) {
         throw new apiError(400, error?.message);
     }
