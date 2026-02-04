@@ -20,7 +20,13 @@ export const createResume = async (req, res) => {
 
         return res
             .status(200)
-            .json(200, newResume, "Resume successfully created");
+            .json(
+                new apiResponse(
+                    200,
+                    newResume,
+                    "Resume has been created successfully",
+                ),
+            );
     } catch (error) {
         throw new apiError(400, error?.message);
     }

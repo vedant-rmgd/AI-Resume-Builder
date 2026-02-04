@@ -2,16 +2,18 @@ import jwt from "jsonwebtoken";
 import { apiError } from "../utils/apiError.js";
 
 const protectRoute = async (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token) {
-        throw new apiError(400, "Unauthorized token");
-    }
     try {
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const authHeader = req.headers.authorization;
 
-        if (!decodedToken) {
-            throw new apiError(404, "Unauthorized, Invalid token");
+        console.log("auth header : ", authHeader)
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            throw new apiError(401, "Unauthorized token");
         }
+
+        const token = authHeader.split(" ")[1];
+
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
         req.userId = decodedToken.userId;
 
