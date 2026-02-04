@@ -8,14 +8,13 @@ import {
     getResumeById,
     getPublicResumeById,
 } from "../controllers/resume.controller.js";
-import userRouter from "./user.route";
 
 const resumeRouter = express.Router();
 
-userRouter.post("/create", protectRoute, createResume);
-userRouter.put("/update", protectRoute, upload.single("image"), updateResume); // if this not works put upload middleware before protectRoute
-userRouter.delete("/delete/:resumeId", protectRoute, deleteResume);
-userRouter.get("/get/:resumeId", protectRoute, getResumeById);
-userRouter.get("/public/:resumeId", getPublicResumeById);
+resumeRouter.post("/create", protectRoute, createResume);
+resumeRouter.put("/update", protectRoute, upload.single("image"), updateResume); // if this not works put upload middleware before protectRoute
+resumeRouter.delete("/delete/:resumeId", protectRoute, deleteResume);
+resumeRouter.get("/get/:resumeId", protectRoute, getResumeById);
+resumeRouter.get("/public/:resumeId", getPublicResumeById);
 
 export default resumeRouter;
