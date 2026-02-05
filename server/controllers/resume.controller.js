@@ -35,7 +35,7 @@ export const createResume = async (req, res) => {
 export const deleteResume = async (req, res) => {
     try {
         const userId = req.userId;
-        const resumeId = req.params;
+        const { resumeId } = req.params;
 
         const deletedResume = await Resume.findOneAndDelete({
             userId,
@@ -63,7 +63,7 @@ export const deleteResume = async (req, res) => {
 export const getResumeById = async (req, res) => {
     try {
         const userId = req.userId;
-        const resumeId = req.params;
+        const { resumeId } = req.params;
 
         const resume = await Resume.findOne({ userId, _id: resumeId });
 
@@ -77,7 +77,13 @@ export const getResumeById = async (req, res) => {
 
         return res
             .status(200)
-            .json(200, resume, "Resume successfully featched by Id");
+            .json(
+                new apiResponse(
+                    200,
+                    resume,
+                    "Resume successfully featched by Id",
+                ),
+            );
     } catch (error) {
         throw new apiError(400, error?.message);
     }
