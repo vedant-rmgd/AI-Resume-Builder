@@ -48,10 +48,9 @@ export const registerUser = async (req, res) => {
             .json(
                 new apiResponse(
                     200,
-                    { newUser: newUser, token: token },
+                    { user: newUser, token: token },
                     "user is successfully registered",
                 ),
-                token,
             );
     } catch (error) {
         throw new apiError(404, error?.message);
