@@ -10,6 +10,10 @@ import {
 import { useEffect, useState } from "react";
 import { dummyResumeData } from "../assets/assets.js";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import api from "../../config/api.js";
+import toast from "react-hot-toast";
+import pdfToText from "react-pdftotext";
 
 function Dashboard() {
     const colors = ["#9333ea", "#d97706", "#dc2626", "#0284c7", "#16a34a"];
@@ -19,23 +23,55 @@ function Dashboard() {
     const [title, setTitle] = useState("");
     const [resume, setResume] = useState(null);
     const [editResumeId, setEditResumeId] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { user, token } = useSelector((state) => state.auth);
 
     const loadAllResumes = async () => {
         setAllResume(dummyResumeData);
     };
 
     const createResume = async (e) => {
-        e.preventDefault();
-        setShowCreateResume(false);
-        navigate(`/app/builder/res123`);
+        try {
+            e.preventDefault();
+            const { data } = await api.post(
+                "/api/resumes/create",
+                { title },
+                { headers: { Authorization: `Bearer ${token}` } },
+            );
+            console.log("data in dashbord : ", data);
+            setAllResume([...allResume, data.data]);
+            setTitle("");
+            setShowCreateResume(false);
+            navigate(`/app/builder/${data.data._id}`);
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || "Error in creating resume",
+            );
+        }
     };
 
     const uploadResume = async (e) => {
         e.preventDefault();
-        setShowUploadResume(false);
-        console.log("resume : ", resume);
-        navigate(`/app/builder/res123`);
+        setIsLoading(true);
+
+        try {
+            const resumeText = await pdfToText(resume);
+            const { data } = await api.post(
+                "/api/ai/upload-resume",
+                { title, resumeText },
+                { headers: { Authorization: `Bearer ${token}` } },
+            );
+            setTitle("");
+            setResume(null);
+            setShowUploadResume(false);
+            navigate(`/app/builder/${data.data.resumeId}`);
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || "Error in uploading resume",
+            );
+        }
+        setIsLoading(false);
     };
 
     const editTitle = async (e) => {
@@ -43,11 +79,15 @@ function Dashboard() {
     };
 
     const deleteResume = (resumeId) => {
-        const confirm = window.confirm("Are you sure want to delete this resume?")
+        const confirm = window.confirm(
+            "Are you sure want to delete this resume?",
+        );
         if (confirm) {
-            setAllResume((prev) => prev.filter((resume) => resume._id !== resumeId))
+            setAllResume((prev) =>
+                prev.filter((resume) => resume._id !== resumeId),
+            );
         }
-    }
+    };
 
     useEffect(() => {
         loadAllResumes();
@@ -112,13 +152,17 @@ function Dashboard() {
                                 >
                                     Updated on{" "}
                                     {new Date(
-                                        resume.updatedAt
+                                        resume.updatedAt,
                                     ).toLocaleDateString()}
                                 </p>
-                                <div onClick={e => e.stopPropagation()} className="absolute top-1 right-1 group-hover:flex items-center hidden">
-                                    <TrashIcon 
-                                    onClick={() => deleteResume(resume._id)}
-                                    className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors" />
+                                <div
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="absolute top-1 right-1 group-hover:flex items-center hidden"
+                                >
+                                    <TrashIcon
+                                        onClick={() => deleteResume(resume._id)}
+                                        className="size-7 p-1.5 hover:bg-white/50 rounded text-slate-700 transition-colors"
+                                    />
                                     <PencilIcon
                                         onClick={() => {
                                             setEditResumeId(resume._id);

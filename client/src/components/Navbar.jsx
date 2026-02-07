@@ -1,17 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../app/features/authSlice";
 
 function Navbar() {
-    const user = { name: "vedant ramgade" };
+    const { user } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+
     const navigate = useNavigate();
 
     const logoutUser = () => {
         navigate("/");
+        dispatch(logout());
     };
 
     return (
         <div className="shadow bg-white">
             <nav className="flex items-center justify-between max-w-8xl max-auto px-4 sm:px-15 py-3.5 text-slate-800 transition-all">
-                <Link to="/" >
+                <Link to="/">
                     <p className="font-bold text-3xl">
                         Craftres
                         <span className=" text-green-500 bg-clip-text text-nowrap">
