@@ -1,5 +1,6 @@
 import {
     FilePenLineIcon,
+    LoaderCircleIcon,
     PencilIcon,
     PlusIcon,
     TrashIcon,
@@ -8,9 +9,8 @@ import {
     XIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { dummyResumeData } from "../assets/assets.js";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import api from "../../config/api.js";
 import toast from "react-hot-toast";
 import pdfToText from "react-pdftotext";
@@ -28,7 +28,17 @@ function Dashboard() {
     const { user, token } = useSelector((state) => state.auth);
 
     const loadAllResumes = async () => {
-        setAllResume(dummyResumeData);
+        try {
+            const { data } = await api.get("/api/users/resumes", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            setAllResume(data.data);
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || "Error in creating resume",
+            );
+        }
     };
 
     const createResume = async (e) => {
@@ -75,16 +85,46 @@ function Dashboard() {
     };
 
     const editTitle = async (e) => {
-        e.preventDefault();
+        try {
+            e.preventDefault();
+            await api.put(
+                `/api/resumes/update`,
+                { resumeId: editResumeId, resumeData: { title } },
+                { headers: { Authorization: `Bearer ${token}` } },
+            );
+            setAllResume(
+                allResume.map((resume) =>
+                    resume._id === editResumeId ? { ...resume, title } : resume,
+                ),
+            );
+            setTitle("");
+            setEditResumeId("");
+            toast.success("Resume title updated successfully");
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || "Error in updating resume",
+            );
+        }
     };
 
-    const deleteResume = (resumeId) => {
-        const confirm = window.confirm(
-            "Are you sure want to delete this resume?",
-        );
-        if (confirm) {
-            setAllResume((prev) =>
-                prev.filter((resume) => resume._id !== resumeId),
+    const deleteResume = async (resumeId) => {
+        try {
+            const confirm = window.confirm(
+                "Are you sure want to delete this resume?",
+            );
+            if (confirm) {
+                await api.delete(
+                    `/api/resumes/delete/${resumeId}`,
+                    { headers: { Authorization: `Bearer ${token}` } },
+                );
+                setAllResume(
+                    allResume.filter((resume) => resume._id !== resumeId),
+                );
+                toast.success("Resume deleted successfully");
+            }
+        } catch (error) {
+            toast.error(
+                error?.response?.data?.message || "Error in uploading resume",
             );
         }
     };
@@ -262,8 +302,11 @@ function Dashboard() {
                                 />
                             </div>
 
-                            <button className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
-                                Upload Resume
+                            <button disabled={isLoading} className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors flex items-center justify-center gap-2">
+                                {isLoading && (
+                                    <LoaderCircleIcon className="animate-spin size-4 text-white" />
+                                )}
+                                {isLoading ? "Uploading" : "Upload Resume"}
                             </button>
                             <XIcon
                                 className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors"
