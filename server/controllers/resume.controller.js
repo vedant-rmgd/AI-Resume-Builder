@@ -145,9 +145,11 @@ export const updateResume = async (req, res) => {
         return res
             .status(200)
             .json(
-                200,
-                updatedResume,
-                "Public resume successfully featched by Id",
+                new apiResponse(
+                    200,
+                    updatedResume,
+                    "Public resume successfully featched by Id",
+                ),
             );
     } catch (error) {
         throw new apiError(400, error?.message);

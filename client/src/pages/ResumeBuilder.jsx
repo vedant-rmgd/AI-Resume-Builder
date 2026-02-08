@@ -25,6 +25,8 @@ import ExperienceForm from "../components/ExperienceForm.jsx";
 import EducationForm from "../components/EducationForm.jsx";
 import ProjectForm from "../components/ProjectForm.jsx";
 import SkillForm from "../components/SkillForm.jsx";
+import { useSelector } from "react-redux";
+import api from "../../config/api.js";
 
 function ResumeBuilder() {
     const { resumeId } = useParams();
@@ -32,10 +34,10 @@ function ResumeBuilder() {
         _id: "",
         title: "",
         personal_info: {},
-        professional_summary: "",
+        professional_summery: "",
         experience: [],
         education: [],
-        project: [],
+        projects: [],
         skills: [],
         template: "classic",
         accent_color: "#3B82F6",
@@ -43,14 +45,20 @@ function ResumeBuilder() {
     });
     const [activeSectionIndex, setActiveSectionIndex] = useState(0);
     const [removeBackground, setRemoveBackground] = useState(false);
+    const { token } = useSelector((state) => state.auth);
 
-    const loadExistingResume = () => {
-        const resume = dummyResumeData.find(
-            (resume) => resume._id === resumeId
-        );
-        if (resume) {
-            setResumeData(resume);
-            document.title = resume.title;
+    const loadExistingResume = async () => {
+        try {
+            const { data } = await api.get(`/api/resumes/get/${resumeId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            console.log("load existing data : ", data.data);
+            if (data.data) {
+                setResumeData(data.data);
+                document.title = data.data.title;
+            }
+        } catch (error) {
+            console.log(error?.message);
         }
     };
 
@@ -143,7 +151,7 @@ function ResumeBuilder() {
                                         <button
                                             onClick={() =>
                                                 setActiveSectionIndex((prev) =>
-                                                    Math.max(prev - 1, 0)
+                                                    Math.max(prev - 1, 0),
                                                 )
                                             }
                                             className="flex items-center gap-1 p-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all"
@@ -158,8 +166,8 @@ function ResumeBuilder() {
                                             setActiveSectionIndex((prev) =>
                                                 Math.min(
                                                     prev + 1,
-                                                    sections.length - 1
-                                                )
+                                                    sections.length - 1,
+                                                ),
                                             )
                                         }
                                         className={`flex items-center gap-1 p-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all ${
@@ -194,13 +202,17 @@ function ResumeBuilder() {
                                         }
                                     />
                                 )}
+                                {console.log(
+                                    "professional summery : ",
+                                    resumeData.professional_summery,
+                                )}
                                 {activeSection.id === "summary" && (
                                     <ProfessionalSummaryForm
-                                        data={resumeData.professional_summary}
+                                        data={resumeData.professional_summery}
                                         onChange={(data) =>
                                             setResumeData((prev) => ({
                                                 ...prev,
-                                                professional_summary: data,
+                                                professional_summery: data,
                                             }))
                                         }
                                         setResumeData={setResumeData}
@@ -233,11 +245,11 @@ function ResumeBuilder() {
 
                                 {activeSection.id === "projects" && (
                                     <ProjectForm
-                                        data={resumeData.project}
+                                        data={resumeData.projects}
                                         onChange={(data) =>
                                             setResumeData((prev) => ({
                                                 ...prev,
-                                                project: data,
+                                                projects: data,
                                             }))
                                         }
                                     />
@@ -266,11 +278,17 @@ function ResumeBuilder() {
                         <div className="relative w-full">
                             <div className="absolute bottom-3 left-0 right-0 flex items-center justify-end gap-2">
                                 {resumeData.public && (
-                                    <button onClick={handleShare} className="flex items-center p-2 px-4 gap-2 text-xs bg-linear-to-br from-blue-100 to-blue-200 text-blue-600 rounded-lg ring-blue-300 hover:ring transition-all">
+                                    <button
+                                        onClick={handleShare}
+                                        className="flex items-center p-2 px-4 gap-2 text-xs bg-linear-to-br from-blue-100 to-blue-200 text-blue-600 rounded-lg ring-blue-300 hover:ring transition-all"
+                                    >
                                         <Share2Icon className="size-4" /> Share
                                     </button>
                                 )}
-                                <button onClick={changeResumeVisibility} className="flex items-center p-2 px-4 gap-2 text-xs bg-linear-to-br from-purple-100 to-purple-200 text-purple-600 rounded-lg ring-purple-300 hover:ring transition-all">
+                                <button
+                                    onClick={changeResumeVisibility}
+                                    className="flex items-center p-2 px-4 gap-2 text-xs bg-linear-to-br from-purple-100 to-purple-200 text-purple-600 rounded-lg ring-purple-300 hover:ring transition-all"
+                                >
                                     {resumeData.public ? (
                                         <EyeIcon className="size-4" />
                                     ) : (
@@ -278,7 +296,10 @@ function ResumeBuilder() {
                                     )}
                                     {resumeData.public ? "Public" : "Private"}
                                 </button>
-                                <button onClick={downloadResume} className="flex items-center p-2 px-4 gap-2 text-xs bg-linear-to-br from-green-100 to-green-200 text-green-600 rounded-lg ring-green-300 hover:ring transition-all">
+                                <button
+                                    onClick={downloadResume}
+                                    className="flex items-center p-2 px-4 gap-2 text-xs bg-linear-to-br from-green-100 to-green-200 text-green-600 rounded-lg ring-green-300 hover:ring transition-all"
+                                >
                                     <DownloadIcon className="size-4" /> Download
                                 </button>
                             </div>

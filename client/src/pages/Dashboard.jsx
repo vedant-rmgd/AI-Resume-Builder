@@ -25,7 +25,7 @@ function Dashboard() {
     const [editResumeId, setEditResumeId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { user, token } = useSelector((state) => state.auth);
+    const { token } = useSelector((state) => state.auth);
 
     const loadAllResumes = async () => {
         try {
