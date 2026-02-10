@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { dummyResumeData } from "../assets/assets.js";
 import {
     ArrowLeftIcon,
     Briefcase,
@@ -27,6 +26,7 @@ import ProjectForm from "../components/ProjectForm.jsx";
 import SkillForm from "../components/SkillForm.jsx";
 import { useSelector } from "react-redux";
 import api from "../../config/api.js";
+import toast from "react-hot-toast";
 
 function ResumeBuilder() {
     const { resumeId } = useParams();
@@ -52,7 +52,6 @@ function ResumeBuilder() {
             const { data } = await api.get(`/api/resumes/get/${resumeId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            console.log("load existing data : ", data.data);
             if (data.data) {
                 setResumeData(data.data);
                 document.title = data.data.title;
@@ -78,7 +77,27 @@ function ResumeBuilder() {
     }, []);
 
     const changeResumeVisibility = async () => {
-        setResumeData({ ...resumeData, public: !resumeData.public });
+        try {
+            const formData = new FormData();
+            formData.append("resumeId", resumeId);
+            formData.append(
+                "resumeData",
+                JSON.stringify({ public: !resumeData.public }),
+            );
+
+            await api.put(
+                "/api/resumes/update",
+                 formData ,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                },
+            );
+
+            setResumeData({ ...resumeData, public: !resumeData.public });
+            toast.success("visiblity changed");
+        } catch (error) {
+            console.log(error?.message);
+        }
     };
 
     const handleShare = () => {
