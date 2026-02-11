@@ -1,7 +1,36 @@
-import { Sparkles } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import api from "../../config/api";
+import toast from "react-hot-toast";
 
 function ProfessionalSummaryForm({ data, onChange, setResumeData }) {
-    console.log("data : ", data, typeof data)
+    const { token } = useSelector((state) => state.auth);
+    const [isGenerating, setIsGenerating] = useState(false);
+
+    const generateSummery = async () => {
+        try {
+            setIsGenerating(true);
+            const prompt = `enhance my professional summery "${data}"`;
+            const response = await api.post(
+                "/api/ai/enhance-pro-sum",
+                { userContent: prompt },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                },
+            );
+
+            setResumeData((prev) => ({
+                ...prev,
+                professional_summery: response.data.data,
+            }));
+        } catch (error) {
+            toast.error("Can't able to enhance professional summery");
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -13,8 +42,17 @@ function ProfessionalSummaryForm({ data, onChange, setResumeData }) {
                         Add summary for your summary here
                     </p>
                 </div>
-                <button className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50">
-                    <Sparkles className="size-4" /> AI Enhance
+                <button
+                    disabled={isGenerating}
+                    onClick={generateSummery}
+                    className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
+                >
+                    {isGenerating ? (
+                        <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                        <Sparkles className="size-4" />
+                    )}
+                    {isGenerating ? "Enhancing..." : "AI Enhance"}
                 </button>
             </div>
 
@@ -30,7 +68,6 @@ function ProfessionalSummaryForm({ data, onChange, setResumeData }) {
                     Tip: Keep it concise (3-4 sentences) and focus on your most
                     relevent achivements and skills.
                 </p>
-                
             </div>
         </div>
     );
