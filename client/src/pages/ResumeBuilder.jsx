@@ -85,13 +85,9 @@ function ResumeBuilder() {
                 JSON.stringify({ public: !resumeData.public }),
             );
 
-            await api.put(
-                "/api/resumes/update",
-                 formData ,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                },
-            );
+            await api.put("/api/resumes/update", formData, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
 
             setResumeData({ ...resumeData, public: !resumeData.public });
             toast.success("visiblity changed");
@@ -113,6 +109,42 @@ function ResumeBuilder() {
 
     const downloadResume = () => {
         window.print();
+    };
+
+    const saveResume = async () => {
+        try {
+            let updatedResumeData = structuredClone(resumeData);
+
+            const isNewImage = typeof resumeData.personal_info.image === "object"
+
+            // remove image from updatedResumeData
+            if (isNewImage) {
+                delete updatedResumeData.personal_info.image;
+            }
+
+            const formData = new FormData();
+            formData.append("resumeId", resumeId);
+            formData.append("resumeData", JSON.stringify(updatedResumeData));
+
+            formData.append("processImage",  "true")
+
+            removeBackground && formData.append("removeBackground", "yes");
+            // typeof resumeData.personal_info.image === "object" &&
+            //     formData.append("image", resumeData.personal_info.image);
+
+            if (isNewImage) {
+                formData.append("image", resumeData.personal_info.image)
+            }
+
+            const { data } = await api.put("/api/resumes/update", formData, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            setResumeData(data.data);
+            toast.success("Resume has been successfully saved");
+        } catch (error) {
+            console.log(error?.message);
+        }
     };
 
     return (
@@ -286,7 +318,14 @@ function ResumeBuilder() {
                                     />
                                 )}
                             </div>
-                            <button className="bg-linear-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">
+                            <button
+                                onClick={() => {
+                                    toast.promise(saveResume, {
+                                        loading: "Saving...",
+                                    });
+                                }}
+                                className="bg-linear-to-br from-green-100 to-green-200 ring-green-300 text-green-600 ring hover:ring-green-400 transition-all rounded-md px-6 py-2 mt-6 text-sm"
+                            >
                                 Save Changes
                             </button>
                         </div>

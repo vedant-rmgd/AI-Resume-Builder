@@ -110,16 +110,20 @@ export const getPublicResumeById = async (req, res) => {
 export const updateResume = async (req, res) => {
     try {
         const userId = req.userId;
-        const { resumeId, resumeData, removeBackground } = req.body;
+        const { resumeId, resumeData, removeBackground, processImage } =
+            req.body;
         const image = req.file;
 
-        let resumeDataCopy = JSON.parse(JSON.stringify(resumeData));
+        let resumeDataCopy =
+            typeof resumeData === "string"
+                ? JSON.parse(resumeData)
+                : structuredClone(resumeData);
 
         if (image) {
-            const imageBufferData = fs.createReadStream(image.path);
+            const imageStream = fs.createReadStream(image.path);
 
             const response = await imagekit.files.upload({
-                file: imageBufferData,
+                file: imageStream,
                 fileName: "resume.png",
                 folder: "user-resumes",
                 transformation: {
@@ -129,7 +133,13 @@ export const updateResume = async (req, res) => {
                 },
             });
 
-            resumeDataCopy.personal_info.image = response.url;
+            console.log("response from imagekit : ", response);
+
+            const baseUrl = response.url.split("?")[0];
+
+            resumeDataCopy.personal_info.image =
+                `${baseUrl}?tr=w-300,h-300,fo-face,z-0.75` +
+                (removeBackground ? ",e-bgremove" : "");
         }
 
         const updatedResume = await Resume.findByIdAndUpdate(
