@@ -91,7 +91,7 @@ export const getResumeById = async (req, res) => {
 
 export const getPublicResumeById = async (req, res) => {
     try {
-        const resumeId = req.params;
+        const {resumeId} = req.params;
 
         const resume = await Resume.findOne({ public: true, _id: resumeId });
 
@@ -116,8 +116,7 @@ export const getPublicResumeById = async (req, res) => {
 export const updateResume = async (req, res) => {
     try {
         const userId = req.userId;
-        const { resumeId, resumeData, removeBackground, processImage } =
-            req.body;
+        const { resumeId, resumeData, removeBackground } = req.body;
         const image = req.file;
 
         let resumeDataCopy =
