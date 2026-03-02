@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/vite": "^4.1.18",
+    "ai-resume-builder": "file:..",
     "axios": "^1.13.4",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
