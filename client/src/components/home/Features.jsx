@@ -1,26 +1,10 @@
 import React from "react";
-import { Zap } from "lucide-react";
-import Title from "./Title.jsx";
 
 function Features() {
     const [isHover, setIsHover] = React.useState(false);
     return (
         <>
-            <div
-                id="features"
-                className="flex flex-col items-center my-5 scroll-mt-12"
-            >
-                <div className="flex items-center gap-2 text-sm text-green-800 bg-green-400/10 border border-green-200 rounded-full px-6 py-1.5">
-                    <Zap width={14} />
-                    <span>Simple Process</span>
-                </div>
-                <Title
-                    title="Build your resume"
-                    discription="Our streamlined process helps you to create a profissional resume in minutes with intelligent AI-powered tools and features"
-                />
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center justify-center xl:-mt-10">
+            <div id="features" className="flex flex-col md:flex-row items-center justify-center xl:-mt-25">
                 <img
                     className="max-w-2xl w-full xl:-ml-32"
                     src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/group-image-1.png"
@@ -65,11 +49,10 @@ function Features() {
                             </svg>
                             <div className="space-y-2">
                                 <h3 className="text-base font-semibold text-slate-700">
-                                    Real-Time Analytics
+                                    AI-Powered Resume Writing
                                 </h3>
                                 <p className="text-sm text-slate-600 max-w-xs">
-                                    Get instant insights into your finances with
-                                    live dashboards.
+                                    Generates professional summaries and job descriptions faster.
                                 </p>
                             </div>
                         </div>
@@ -93,11 +76,10 @@ function Features() {
                             </svg>
                             <div className="space-y-2">
                                 <h3 className="text-base font-semibold text-slate-700">
-                                    Bank-Grade Security
+                                    Real-Time Resume Preview
                                 </h3>
                                 <p className="text-sm text-slate-600 max-w-xs">
-                                    End-to-end encryption, 2FA, compliance with
-                                    GDPR standards.
+                                    See changes to in your resume instantly while creating and editing resume.
                                 </p>
                             </div>
                         </div>
@@ -122,11 +104,11 @@ function Features() {
                             </svg>
                             <div className="space-y-2">
                                 <h3 className="text-base font-semibold text-slate-700">
-                                    Customizable Reports
+                                    Public Resume Sharing
                                 </h3>
                                 <p className="text-sm text-slate-600 max-w-xs">
-                                    Export professional, audit-ready financial
-                                    reports for tax or internal review.
+                                    Generate a shareable link to view the resume online instantly.
+                                    
                                 </p>
                             </div>
                         </div>

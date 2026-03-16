@@ -25,17 +25,17 @@ function Footer() {
                 </p>
                 <div className="flex items-center gap-4 mt-6">
                     <a
-                        href="#"
+                        href="https://github.com/vedant-rmgd/AI-Resume-Builder"
                         className="font-medium text-gray-800 hover:text-black transition-all"
                     >
-                        Brand Guidelines
+                        Github
                     </a>
                     <div className="h-4 w-px bg-black/20"></div>
                     <a
-                        href="#"
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=vedantramgade@gmail.com"
                         className="font-medium text-gray-800 hover:text-black transition-all"
                     >
-                        Trademark Policy
+                        Contact me
                     </a>
                 </div>
             </footer>

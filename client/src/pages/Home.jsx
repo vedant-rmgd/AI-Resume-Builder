@@ -6,13 +6,13 @@ import Footer from "../components/home/Footer.jsx";
 
 function Home() {
     return (
-        <>
-            <Banner />
+        <div>
+            <Banner/>
             <Hero/>
             <Features/>
             <CallToAction/>
             <Footer/>
-        </>
+        </div>
     );
 }
 
